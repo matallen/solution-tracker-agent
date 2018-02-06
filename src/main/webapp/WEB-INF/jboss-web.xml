@@ -1,0 +1,3 @@
+<jboss-web>
+    <context-root>solution-tracker</context-root>
+</jboss-web>
