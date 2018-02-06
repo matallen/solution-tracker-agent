@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import com.google.api.client.repackaged.com.google.common.base.Objects;
+//import com.google.api.client.repackaged.com.google.common.base.Objects;
+import com.google.common.base.Objects;
 
 //@JsonFilter("myFilter")
 public class Document {
