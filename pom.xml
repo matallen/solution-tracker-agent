@@ -8,7 +8,7 @@
     
 	<name>${project.groupId}.${project.artifactId}</name>
     <groupId>com.redhat.sso</groupId>
-    <artifactId>solution-tracker-agent</artifactId>
+    <artifactId>solution-tracker</artifactId>
     <version>1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
