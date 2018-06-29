@@ -8,12 +8,28 @@
     
 	<name>${project.groupId}.${project.artifactId}</name>
     <groupId>com.redhat.sso</groupId>
-    <artifactId>solution-tracker</artifactId>
+    <artifactId>solution-tracker-agent</artifactId>
     <version>1.0-SNAPSHOT</version>
-	<packaging>war</packaging>
-
+	<packaging>jar</packaging>
+	
+	<properties>
+		<version.wildfly.swarm>2017.2.0</version.wildfly.swarm>
+	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.wildfly.swarm</groupId>
+				<artifactId>bom</artifactId>
+				<version>${version.wildfly.swarm}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
 	<build>
-		<finalName>${project.artifactId}</finalName>
+		<finalName>solution-tracker</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
@@ -30,60 +46,35 @@
 					</systemProperty>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${version.war.plugin}</version>
+				<configuration>
+					<!-- Java EE 7 doesn't require web.xml, Maven needs to catch up! -->
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+			<!-- The WildFly Swarm plugin creates an uber jar -->
+			<!-- To use, run: mvn wildfly-swarm:run -->
+			<plugin>
+				<groupId>org.wildfly.swarm</groupId>
+				<artifactId>wildfly-swarm-plugin</artifactId>
+				<version>${version.wildfly.swarm}</version>
+				<configuration>
+					<mainClass>com.redhat.developers.msa.hola.Main</mainClass>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>package</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
 	<dependencies>
-	
-	<!-- 
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
-			<version>3.8</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<version>3.8</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-			<version>1.1</version>
-		</dependency>
-	 -->
-		<!-- totp dependency -->
-		<!-- 
-	<dependency>
-    <groupId>org.jboss.aerogear</groupId>
-    <artifactId>aerogear-otp-java</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
-</dependency>
-
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcprov-jdk14</artifactId>
-			<version>1.51</version>
-		</dependency>
-		
-	<dependency>
-    <groupId>com.unboundid</groupId>
-    <artifactId>unboundid-ldapsdk</artifactId>
-    <version>3.0.0</version>
-</dependency>
-		 -->
-<!-- 
-	   <dependency>
-        <groupId>org.apache.poi</groupId>
-        <artifactId>poi</artifactId>
-        <version>3.8</version>
-    </dependency>
-		<dependency>
-		    <groupId>com.google.oauth-client</groupId>
-		    <artifactId>google-oauth-client</artifactId>
-		    <version>1.20.0</version>
-		</dependency>
- -->
 		<dependency>
 			<groupId>com.google.gdata</groupId>
 			<artifactId>core</artifactId>
@@ -121,51 +112,6 @@
             <artifactId>resteasy-jaxrs</artifactId>
             <version>2.2.1.GA</version>
         </dependency>
-        <!-- 
-        <dependency>
-            <groupId>org.jfree</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>1.0.19</version>
-        </dependency>
-         -->
-		<!-- 
-				<dependency>
-					<groupId>org.apache.camel</groupId>
-					<artifactId>camel-core</artifactId>
-					<version>2.14.0</version>
-				</dependency>
-		 -->
-
-
-<!--
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-core</artifactId>
-			<version>2.13.1</version>
-		</dependency>
-		<dependency>
-			<groupId>net.java.quickcheck</groupId>
-			<artifactId>quickcheck</artifactId>
-			<version>0.6</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.2.5</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.monitoring</groupId>
-			<artifactId>event-monitor-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.thoughtworks.xstream</groupId>
-			<artifactId>xstream</artifactId>
-			<version>1.4.4</version>
-		</dependency>
--->
 	</dependencies>
 </project>
 
