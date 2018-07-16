@@ -24,11 +24,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
-import com.redhat.sso.solutiontracker.analytics.AnalyticsService3;
+//import com.redhat.sso.solutiontracker.analytics.AnalyticsService3;
 
 @Path("/analytics")
 public class AgentController{
-  public AnalyticsService3 service3=AnalyticsService3.get();
+//  public AnalyticsService3 service3=AnalyticsService3.get();
   private static List<String> hits=new ArrayList<String>();
   private static boolean inMemory=true;
   
@@ -116,10 +116,10 @@ public class AgentController{
     String timestamp=(String)request.getParameter("timestamp");
     
     
-    Cookie cid=getCookie(request, "cid)");
+    Cookie cid=getCookie(request, "cid-"+id);
     int cookieExpiryInSeconds=300; // 300 = 5 minutes
     if (cid==null)
-      response.addCookie(newCookie("cid", cookieExpiryInSeconds));
+      response.addCookie(newCookie("cid-"+id, cookieExpiryInSeconds));
     
     if (user==null) user="unknown";
     if (timestamp==null) timestamp=new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss").format(new Date());
@@ -131,7 +131,7 @@ public class AgentController{
         SingletonLogger.getInstance().writeToFile(timestamp+"#"+id+"#"+user);
       }
     }else{
-      System.out.println("ignoring stats increment for (user="+user+"), cid cookie (expiry="+cookieExpiryInSeconds+") exists...");
+      System.out.println("ignoring stats increment for (user="+user+"), cookie (id=\"cid-"+id+"\", expiry="+cookieExpiryInSeconds+") exists...");
     }
     
 //    boolean isAgent=true;
@@ -248,7 +248,7 @@ public class AgentController{
   private Cookie getCookie(HttpServletRequest request, String name){
     if (null!=request.getCookies()){
       for(Cookie c:request.getCookies()){
-        if (c.getName().equals("cid")){
+        if (c.getName().equals(name)){
           return c;
         }
       }
