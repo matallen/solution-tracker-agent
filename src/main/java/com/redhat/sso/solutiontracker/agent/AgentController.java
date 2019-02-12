@@ -134,9 +134,15 @@ public class AgentController{
       System.out.println("ignoring stats increment for (user="+user+"), cookie (id=\"cid-"+id+"\", expiry="+cookieExpiryInSeconds+") exists...");
     }
     
+    if (id.startsWith("DOC-") || id.matches("\\d+")){
+    	return serveImage(servletContext, response, "rh-mojo-icons-consulting-inc0340383rm-201512_sso-solution_x60.png");
+    }else{
+    	
+    }
+    
 //    boolean isAgent=true;
 //    if (isAgent){
-      return serveImage(servletContext, response, "rh-mojo-icons-consulting-inc0340383rm-201512_sso-solution_x60.png");
+      return serveImage(servletContext, response, "rh-mojo-icons-consulting-inc0340383rm-201512_untracked_x60.png");
 //    }else{
 //      String filenameAddendum = doc.getType().toLowerCase().replaceAll(" ", "-");
 //      if (StringUtils.isNotBlank(filenameAddendum)) {
