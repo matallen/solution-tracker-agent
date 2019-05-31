@@ -84,6 +84,9 @@ public class AgentController{
     
     if (null!=request.getParameter("ignore")) return Response.status(200).build();
     
+    String size=null!=request.getParameter("s")?request.getParameter("s"):"x60";
+    
+    
 //    Document doc=service3.getDocuments().get(id);
 //    if (null==doc) throw new RuntimeException("[/track/"+id+"] Unable to find document");
     
@@ -135,14 +138,14 @@ public class AgentController{
     }
     
     if (id.startsWith("DOC-") || id.matches("\\d+")){
-    	return serveImage(servletContext, response, "rh-mojo-icons-consulting-inc0340383rm-201512_sso-solution_x60.png");
+    	return serveImage(servletContext, response, "rh-mojo-icons-consulting-inc0340383rm-201512_sso-solution_"+size+".png");
     }else{
     	
     }
     
 //    boolean isAgent=true;
 //    if (isAgent){
-      return serveImage(servletContext, response, "rh-mojo-icons-consulting-inc0340383rm-201512_untracked_x60.png");
+      return serveImage(servletContext, response, "rh-mojo-icons-consulting-inc0340383rm-201512_untracked_"+size+".png");
 //    }else{
 //      String filenameAddendum = doc.getType().toLowerCase().replaceAll(" ", "-");
 //      if (StringUtils.isNotBlank(filenameAddendum)) {
