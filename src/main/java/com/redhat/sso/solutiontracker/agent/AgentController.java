@@ -84,8 +84,11 @@ public class AgentController{
     
     if (null!=request.getParameter("ignore")) return Response.status(200).build();
     
-    String size=null!=request.getParameter("s")?request.getParameter("s"):"x60";
-    
+    String size="x60";//=null!=request.getParameter("s")?request.getParameter("s"):"x60";
+    if (id.contains(":")){
+    	size=id.split(":")[1];
+    	id=id.split(":")[0];
+    }
     
 //    Document doc=service3.getDocuments().get(id);
 //    if (null==doc) throw new RuntimeException("[/track/"+id+"] Unable to find document");
