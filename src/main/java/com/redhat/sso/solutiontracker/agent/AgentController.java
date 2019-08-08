@@ -84,7 +84,7 @@ public class AgentController{
     
     if (null!=request.getParameter("ignore")) return Response.status(200).build();
     
-    String size="x60";//=null!=request.getParameter("s")?request.getParameter("s"):"x60";
+    String size="hex-grey";//=null!=request.getParameter("s")?request.getParameter("s"):"x60";
     if (id.contains(":")){
     	size=id.split(":")[1];
     	id=id.split(":")[0];
@@ -120,6 +120,7 @@ public class AgentController{
     
     String user=(String)request.getParameter("user");
     String timestamp=(String)request.getParameter("timestamp");
+    String docId=(String)request.getParameter("id");
     
     
     Cookie cid=getCookie(request, "cid-"+id);
@@ -132,7 +133,7 @@ public class AgentController{
     
     if (cid==null){
       if (inMemory){
-        hits.add(timestamp+"#"+id+"#"+user);
+        hits.add(timestamp+"#"+id+"#"+user+(docId!=null?"#"+docId:""));
       }else{
         SingletonLogger.getInstance().writeToFile(timestamp+"#"+id+"#"+user);
       }
@@ -141,14 +142,16 @@ public class AgentController{
     }
     
     if (id.startsWith("DOC-") || id.matches("\\d+")){
-    	return serveImage(servletContext, response, "rh-mojo-icons-consulting-inc0340383rm-201512_sso-solution_"+size+".png");
+    	//return serveImage(servletContext, response, "rh-mojo-icons-consulting-inc0340383rm-201512_sso-solution_"+size+".png");
+    	return serveImage(servletContext, response, "spm-"+size+"-x100.png");
     }else{
     	
     }
     
 //    boolean isAgent=true;
 //    if (isAgent){
-      return serveImage(servletContext, response, "rh-mojo-icons-consulting-inc0340383rm-201512_untracked_"+size+".png");
+    return serveImage(servletContext, response, "untracked-"+size+"-x100.png");
+      //return serveImage(servletContext, response, "rh-mojo-icons-consulting-inc0340383rm-201512_untracked_"+size+".png");
 //    }else{
 //      String filenameAddendum = doc.getType().toLowerCase().replaceAll(" ", "-");
 //      if (StringUtils.isNotBlank(filenameAddendum)) {
