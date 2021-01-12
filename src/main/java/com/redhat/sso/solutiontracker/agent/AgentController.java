@@ -23,6 +23,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 //import com.redhat.sso.solutiontracker.analytics.AnalyticsService3;
 
@@ -31,6 +32,16 @@ public class AgentController{
 //  public AnalyticsService3 service3=AnalyticsService3.get();
   private static List<String> hits=new ArrayList<String>();
   private static boolean inMemory=true;
+  
+  private ResponseBuilder newResponse(int status){
+  	System.out.println("adding response headers");
+  	return Response.status(status)
+       .header("Access-Control-Allow-Origin",  "*")
+       .header("Content-Type","application/json")
+       .header("Cache-Control", "no-store, must-revalidate, no-cache, max-age=0")
+       .header("Pragma", "no-cache")
+       .header("X-Content-Type-Options", "nosniff");
+  }
   
   @GET
   @Path("/viewHits")
@@ -46,9 +57,9 @@ public class AgentController{
         for(String hit:hits)
           sb.append(hit).append("\n");
       }
-      return Response.status(200).entity(sb.toString()).build();
+      return newResponse(200).entity(sb.toString()).build();
     }else{
-      return Response.status(200).entity(SingletonLogger.getInstance().readFile(false)).build();
+      return newResponse(200).entity(SingletonLogger.getInstance().readFile(false)).build();
     }
   }
 
@@ -67,12 +78,12 @@ public class AgentController{
           sb.append(hit).append("\n");
       }
       hits.clear();
-      return Response.status(200).entity(sb.toString()).build();
+      return newResponse(200).entity(sb.toString()).build();
     }else{
-      return Response.status(200).entity(SingletonLogger.getInstance().readFile(true)).build();
+      return newResponse(200).entity(SingletonLogger.getInstance().readFile(true)).build();
     }
   }
-  
+
   @GET
   @Path("/agent/track/{id}")
   public Response trackDocumentHit(
@@ -82,7 +93,7 @@ public class AgentController{
       ,@PathParam("id") String id
       ) throws FileNotFoundException, IOException, ServletException{
     
-    if (null!=request.getParameter("ignore")) return Response.status(200).build();
+    if (null!=request.getParameter("ignore")) return newResponse(200).build();
     
     String size="hex-grey";//=null!=request.getParameter("s")?request.getParameter("s"):"x60";
     if (id.contains(":")){
@@ -278,9 +289,12 @@ public class AgentController{
     System.out.println("Serving image/file = "+filename);
     // retrieve mimeType dynamically
     String mime=ctx.getMimeType(filename);
+    
+    resp.setHeader("Access-Control-Allow-Origin", "*");
+    
     if (mime==null) {
 //      resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
+      return newResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
     }
   
     resp.setContentType(mime); // or "image/svg+xml" and serve the html
@@ -299,7 +313,7 @@ public class AgentController{
     out.close();
     in.close();
     
-    return Response.status(200).build();
+    return newResponse(200).build();
   }
   
 }
